@@ -273,6 +273,13 @@ footer {
   line-height: 1.6;
 }
 .post-body code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+.post-body .tex { margin: 18px 0; overflow-x: auto; overflow-y: hidden; }
+.table-wrap { margin: 22px 0; overflow-x: auto; }
+.post-body table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.post-body caption { caption-side: top; text-align: left; font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+.post-body th, .post-body td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+.post-body thead th { border-bottom: 2px solid var(--text); font-weight: 600; }
+.post-body tbody tr:last-child td { border-bottom: 2px solid var(--text); }
 .link-card {
   display: flex;
   flex-direction: column;

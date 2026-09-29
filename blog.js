@@ -57,7 +57,15 @@ function renderBlock(b) {
   switch (b.type) {
     case "h":    return `<h2>${esc(b.text)}</h2>`;
     case "p":    return `<p>${esc(b.text)}</p>`;          // 数式は $...$ で書けます
+    case "tex":  return `<div class="tex">\\[${esc(b.text)}\\]</div>`;  // ディスプレイ数式（TeX）
     case "code": return `<pre><code>${esc(b.text)}</code></pre>`;
+    case "table": {                                        // head: 見出し配列, rows: 2 次元配列（セル内も $...$ 可）
+      const row = (cells, tag) => `<tr>${(cells || []).map(c => `<${tag}>${esc(c)}</${tag}>`).join("")}</tr>`;
+      return `<div class="table-wrap"><table>` +
+             (b.caption ? `<caption>${esc(b.caption)}</caption>` : "") +
+             (b.head ? `<thead>${row(b.head, "th")}</thead>` : "") +
+             `<tbody>${(b.rows || []).map(r => row(r, "td")).join("")}</tbody></table></div>`;
+    }
     case "img":  return `<figure><img src="${esc(b.src)}" alt="${esc(b.alt || "")}">` +
                         (b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : "") +
                         `</figure>`;
