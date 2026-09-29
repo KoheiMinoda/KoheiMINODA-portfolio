@@ -61,6 +61,14 @@ function renderBlock(b) {
     case "img":  return `<figure><img src="${esc(b.src)}" alt="${esc(b.alt || "")}">` +
                         (b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : "") +
                         `</figure>`;
+    case "url": {                                          // 外部リンク（別タブで開く）
+      if (!/^https?:\/\//i.test(b.href || "")) return "";
+      const host = new URL(b.href).hostname;
+      return `<a class="link-card" href="${esc(b.href)}" target="_blank" rel="noopener noreferrer">` +
+             `<span class="link-title">${esc(b.text || b.href)} ↗</span>` +
+             (b.desc ? `<span class="link-desc">${esc(b.desc)}</span>` : "") +
+             `<span class="link-host">${esc(host)}</span></a>`;
+    }
     default:     return "";
   }
 }

@@ -1,39 +1,21 @@
 [
   {
-    "id": "vortex-shedding-heave-plate",
-    "title": "Vortex shedding around a heave plate",
-    "date": "2026-09-19",
-    "thumb": "results/vortex.gif",
-    "tags": ["Code_Saturne", "ALE", "k-ω SST"],
+    "id": "POD Benchmark",
+    "title": "POD Benchmark for Rectangle Cylinder",
+    "date": "2026-09-29",
+    "thumb": "results/CFD/01/mode_1.png",
+    "tags": ["POD", "Benchmark", "Code_Saturne", "ALE", "k-ω SST"],
     "body": [
-      { "type": "p", "text": "Vorticity field around a heave plate undergoing forced heave oscillation, computed with Code_Saturne using ALE mesh motion and the k-ω SST turbulence model." },
-      { "type": "img", "src": "results/vortex.gif", "alt": "Vortex shedding animation", "caption": "Vorticity field during one oscillation cycle." },
-      { "type": "h", "text": "Flow conditions" },
-      { "type": "p", "text": "The regime is set by the Keulegan–Carpenter number $KC = U_m T / D$ and the Reynolds number. Fill in the actual values you used here." },
-      { "type": "p", "text": "TODO: add the main observations — separation, roll-up of the shear layer, and the resulting force history." }
-    ]
-  },
-  {
-    "id": "solid-vs-perforated",
-    "title": "Solid vs. perforated plates",
-    "date": "2026-09-10",
-    "thumb": "",
-    "tags": ["Added mass", "Damping"],
-    "body": [
-      { "type": "p", "text": "How the perforation ratio changes the added mass and hydrodynamic damping of a heave plate." },
-      { "type": "p", "text": "TODO: add the comparison plots and the trend you found." }
-    ]
-  },
-  {
-    "id": "pod-flow-analysis",
-    "title": "POD flow analysis",
-    "date": "2026-09-01",
-    "thumb": "",
-    "tags": ["POD", "SVD", "PyVista"],
-    "body": [
-      { "type": "p", "text": "Proper Orthogonal Decomposition (SVD of the snapshot matrix) applied to the wake to extract the dominant coherent structures." },
-      { "type": "code", "text": "import numpy as np\n# X: (n_points, n_snapshots)\nU, S, Vt = np.linalg.svd(X, full_matrices=False)\nenergy = S**2 / np.sum(S**2)" },
-      { "type": "p", "text": "TODO: show the leading modes and their energy content." }
+      { "type": "h", "text": "Introduction" },
+      { "type": "p", "text": "POD is a technique used to analyze complex fluid dynamics data by identifying the most energetic modes of variation." },
+      { "type": "h", "text": "Settings" },
+      { "type": "h", "text": "Results" },
+      { "type": "img", "src": "results/CFD/01/pod_U_modes.png", "alt": "", "caption": "mode of Ux and Uy" },
+      { "type": "img", "src": "results/CFD/01/force_timeseries.png", "alt": "", "caption": "Time series of force coefficients" },
+      { "type": "h", "text": "Summary" },
+      { "type": "h", "text": "References" },
+      { "type": "url", "href": "http://cfd.mace.manchester.ac.uk/ercoftac/doku.php?id=cases:case043#", "text": "Benchmark Case 043" },
+      { "type": "url", "href": "https://www.nagare.or.jp/download/noauth.html?d=30-2rensai2.pdf&dir=55", "text": "Proper Orthogonal Decomposition in Fluid Flow Analysis" }
     ]
   }
 ]

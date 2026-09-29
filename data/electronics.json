@@ -1,24 +1,2 @@
 [
-  {
-    "id": "imu-motion-logger",
-    "title": "IMU motion logger (first build)",
-    "date": "2026-09-15",
-    "thumb": "",
-    "tags": ["ESP32", "IMU"],
-    "body": [
-      { "type": "p", "text": "First hardware build: reading an IMU (accelerometer + gyroscope) on a microcontroller and logging orientation. Coming from software, this is where I start with the hardware basics." },
-      { "type": "p", "text": "TODO: add wiring, a photo, and the logged data once built." }
-    ]
-  },
-  {
-    "id": "floating-model-6dof",
-    "title": "Measuring 6-DOF motion of a floating model",
-    "date": "2026-09-05",
-    "thumb": "",
-    "tags": ["Wave tank", "Potential theory"],
-    "body": [
-      { "type": "p", "text": "Build a small floating body, measure its six-degree-of-freedom response in waves, and compare against potential-flow theory." },
-      { "type": "p", "text": "TODO: describe the setup and the comparison once done." }
-    ]
-  }
 ]

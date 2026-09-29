@@ -273,6 +273,24 @@ footer {
   line-height: 1.6;
 }
 .post-body code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+.link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background .15s ease;
+}
+.link-card:hover { background: var(--accent-dim); }
+.link-title { font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
+.link-desc  { font-size: .9rem; color: var(--text); }
+.link-host  { font-size: .8rem; color: var(--muted); }
 /* ===========================================================
    スマホ対応（640px 未満）
    カードは 1 列、余白・文字サイズを縮小
