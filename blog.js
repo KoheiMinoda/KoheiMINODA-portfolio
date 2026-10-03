@@ -9,6 +9,16 @@ function esc(s) {
   }[c]));
 }
 
+/* "2026-10-02" → "02 Oct 2026"（ロケールに依存せず固定表記） */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtDate(s) {
+  const m = /^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/.exec(String(s ?? "").trim());
+  if (!m) return String(s ?? "");
+  const mon = MONTHS[Number(m[2]) - 1];
+  if (!mon) return String(s);
+  return m[3] ? `${m[3].padStart(2, "0")} ${mon} ${m[1]}` : `${mon} ${m[1]}`;
+}
+
 const LOAD_ERROR =
   'データを読み込めませんでした。ローカルで確認するときは ' +
   '<code>python -m http.server</code> などで配信してください' +
@@ -42,7 +52,7 @@ async function renderIndex(category) {
         <a class="post-card" href="${href}">
           ${thumb}
           <div class="info">
-            ${p.date ? `<span class="post-date">${esc(p.date)}</span>` : ""}
+            ${p.date ? `<time class="post-date" datetime="${esc(p.date)}">${esc(fmtDate(p.date))}</time>` : ""}
             <h3>${esc(p.title || "Untitled")}</h3>
           </div>
         </a>`;
@@ -104,7 +114,7 @@ async function renderPost() {
 
     let html = `<a class="back-link" href="${cat}.html">← ${esc(cat.toUpperCase())}</a>`;
     html += `<h1>${esc(p.title)}</h1>`;
-    if (p.date) html += `<p class="post-date">${esc(p.date)}</p>`;
+    if (p.date) html += `<p class="post-date"><time datetime="${esc(p.date)}">${esc(fmtDate(p.date))}</time></p>`;
     if (Array.isArray(p.tags) && p.tags.length)
       html += `<ul class="tags">${p.tags.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
     html += `<div class="post-body">${(p.body || []).map(renderBlock).join("")}</div>`;
