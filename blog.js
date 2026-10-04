@@ -1,6 +1,8 @@
 /* ===========================================================
    blog.js — JSON からブログ一覧 / 詳細を描画する共通スクリプト
    一覧: renderIndex("cfd")   詳細: renderPost()
+   データ: data/<category>/index.json に記事ファイル名を列挙し、
+           記事本体は data/<category>/<name>.json（1 ファイル 1 記事）
    =========================================================== */
 
 function esc(s) {
@@ -19,6 +21,15 @@ function fmtDate(s) {
   return m[3] ? `${m[3].padStart(2, "0")} ${mon} ${m[1]}` : `${mon} ${m[1]}`;
 }
 
+async function fetchJSON(path) {
+  const res = await fetch(path, { cache: "no-cache" });
+  if (!res.ok) throw new Error(`${path}: ${res.status}`);
+  return res.json();
+}
+
+/* ファイル名として安全な文字だけ許可（"../" などを防ぐ） */
+const SAFE_NAME = /^[A-Za-z0-9_-]+$/;
+
 const LOAD_ERROR =
   'データを読み込めませんでした。ローカルで確認するときは ' +
   '<code>python -m http.server</code> などで配信してください' +
@@ -29,9 +40,16 @@ async function renderIndex(category) {
   const grid = document.getElementById("grid");
   const status = document.getElementById("status");
   try {
-    const res = await fetch(`data/${category}.json`, { cache: "no-cache" });
-    if (!res.ok) throw new Error(res.status);
-    const posts = await res.json();
+    const files = await fetchJSON(`data/${category}/index.json`);
+    const names = files.map(f => String(f).replace(/\.json$/, "")).filter(n => SAFE_NAME.test(n));
+    const posts = (await Promise.all(names.map(async name => {
+      try {
+        return { ...(await fetchJSON(`data/${category}/${name}.json`)), file: name };
+      } catch (e) {
+        console.warn(e);        // 1 件読めなくても他の記事は表示する
+        return null;
+      }
+    }))).filter(Boolean);
 
     posts.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
 
@@ -44,7 +62,7 @@ async function renderIndex(category) {
     grid.innerHTML = posts.map(p => {
       const href = p.url
         ? p.url
-        : `post.html?cat=${encodeURIComponent(category)}&id=${encodeURIComponent(p.id)}`;
+        : `post.html?cat=${encodeURIComponent(category)}&id=${encodeURIComponent(p.file)}`;
       const thumb = p.thumb
         ? `<div class="post-thumb"><img src="${esc(p.thumb)}" alt="${esc(p.title)}"></div>`
         : `<div class="post-thumb thumb-empty"><span>${esc((p.tags && p.tags[0]) || category.toUpperCase())}</span></div>`;
@@ -102,13 +120,16 @@ async function renderPost() {
   if (navLink) navLink.setAttribute("aria-current", "page");
 
   if (!cat || !id) { el.innerHTML = "記事が指定されていません。"; return; }
+  if (!SAFE_NAME.test(cat) || !SAFE_NAME.test(id)) { el.innerHTML = "記事が見つかりませんでした。"; return; }
 
   try {
-    const res = await fetch(`data/${cat}.json`, { cache: "no-cache" });
-    if (!res.ok) throw new Error(res.status);
-    const posts = await res.json();
-    const p = posts.find(x => x.id === id);
-    if (!p) { el.innerHTML = "記事が見つかりませんでした。"; return; }
+    let p;
+    try {
+      p = await fetchJSON(`data/${cat}/${id}.json`);
+    } catch (e) {
+      el.innerHTML = "記事が見つかりませんでした。";
+      return;
+    }
 
     document.title = `${p.title} — Kohei MINODA`;
 
